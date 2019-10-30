@@ -25,7 +25,7 @@ public class AccountInfo {
     private String note;
 
     @ColumnInfo(name = "create_time")
-    private Date createTime;
+    private String createTime;
 
     @ColumnInfo(name = "del_flag")
     private int delFlag;
@@ -70,11 +70,11 @@ public class AccountInfo {
         this.note = note;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
