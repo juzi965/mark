@@ -2,13 +2,15 @@ package top.hooya.mark.ui.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,7 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import top.hooya.mark.R;
-import top.hooya.mark.utils.CardViewAdapter;
+import top.hooya.mark.dao.AccountInfoDao;
+import top.hooya.mark.pojo.AccountInfo;
+import top.hooya.mark.service.AccountInfoService;
+import top.hooya.mark.service.impl.AccountInfoServiceImpl;
+import top.hooya.mark.utils.AppDatabase;
+import top.hooya.mark.utils.BaseApplication;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,7 +36,12 @@ public class PlaceholderFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private PageViewModel pageViewModel;
-    private List<String> list = new ArrayList<>();
+
+    private RecyclerView recyclerView;
+    private Context mContext = BaseApplication.getContext();
+    private LinearLayoutManager linearLayoutManager;
+    private  CardViewAdapter cardViewAdapter;
+
 
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
@@ -43,36 +55,39 @@ public class PlaceholderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-        pageViewModel.setIndex(index);
+        pageViewModel.updateAccountInfo();
     }
 
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        list.add("1");
-        list.add("2");
-        list.add("3");
-        list.add("4");
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_view);
-        Context context = root.getContext();
-        CardViewAdapter cardViewAdapter = new CardViewAdapter(context,list);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        recyclerView = root.findViewById(R.id.recycler_view);
+        linearLayoutManager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(cardViewAdapter);
 
-//        final TextView textView = root.findViewById(R.id.show_name);
-//        pageViewModel.getText().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+        pageViewModel.getAccountInfos().observe(this, new Observer<List<AccountInfo>>() {
+            @Override
+            public void onChanged(List<AccountInfo> accountInfos) {
+                cardViewAdapter = new CardViewAdapter(mContext,accountInfos);
+                cardViewAdapter.setItemClickListener(new CardViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Toast.makeText(BaseApplication.getContext(), "click " + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                cardViewAdapter.setLongClickListener(new CardViewAdapter.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(int position) {
+                        Toast.makeText(BaseApplication.getContext(), "long click " + position, Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                });
+                recyclerView.setAdapter(cardViewAdapter);
+
+            }
+        });
         return root;
     }
 }

@@ -48,10 +48,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void initData() {
-        list = new ArrayList<>();
-        for (int i = 0; i <= 20; i++) {
-            list.add("Item " + i);
-        }
-    }
 }

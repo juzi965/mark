@@ -19,7 +19,7 @@ public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance;
 
     //单例模式
-    static AppDatabase getInstance(Context context) {
+    public synchronized static AppDatabase getInstance(Context context) {
         if (instance == null) {
             synchronized (AppDatabase.class) {
                 if (instance == null) {

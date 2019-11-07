@@ -11,7 +11,7 @@ import top.hooya.mark.pojo.AccountInfo;
 @Dao
 public interface AccountInfoDao {
 
-    @Query("select * from account_info where del_flag = 0")
+    @Query("select * from account_info")
     List<AccountInfo> selectAccountInfoList();
 
     @Insert
