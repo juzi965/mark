@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import top.hooya.mark.dao.AccountInfoDao;
 import top.hooya.mark.pojo.AccountInfo;
 
-@Database(entities = {AccountInfo.class},version = 1)
+@Database(entities = {AccountInfo.class},version = 1,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract AccountInfoDao accountInfoDao();

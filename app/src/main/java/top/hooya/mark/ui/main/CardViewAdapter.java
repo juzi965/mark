@@ -24,7 +24,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ItemCa
     }
 
     public interface OnLongClickListener{
-        boolean onLongClick(int position);
+        boolean onLongClick(View view, int position);
     }
 
     private OnItemClickListener mItemClickListener;
@@ -57,7 +57,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ItemCa
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewAdapter.ItemCardViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final CardViewAdapter.ItemCardViewHolder holder, final int position) {
         holder.textView.setText(mList.get(position).getAccountName());
         //设置点击和长按事件
         if (mItemClickListener != null){
@@ -72,7 +72,7 @@ public class CardViewAdapter extends RecyclerView.Adapter<CardViewAdapter.ItemCa
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    return mLongClickListener.onLongClick(position);
+                    return mLongClickListener.onLongClick(holder.itemView,position);
                 }
             });
         }
